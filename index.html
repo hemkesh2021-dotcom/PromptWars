@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Advanced urban mobility intelligence for safer route recommendations with real-time ETA, traffic, weather, and contextual risk analysis.">
+  <title>UrbanRoute IQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Leaflet CSS (free map library) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Urban Mobility Intelligence</p>
+        <h1>Map safer. Decide faster.</h1>
+        <p class="hero-text">
+          A route-decision cockpit that compares ETA, traffic, weather, and contextual travel risk,
+          then emits a strict operator-ready recommendation with live route visualization.
+        </p>
+        <div class="hero-tags">
+          <span class="tag">Live Route Map</span>
+          <span class="tag">Women Safety Mode</span>
+          <span class="tag">Real-time ETA</span>
+        </div>
+      </div>
+
+      <section class="panel map-panel">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Live Map</p>
+            <h2>Route Visualization</h2>
+          </div>
+          <span class="status-pill" id="mapStatusPill">
+            <span class="status-dot warn" id="mapStatusDot"></span>
+            <span id="mapStatusLabel">Waiting…</span>
+          </span>
+        </div>
+
+        <!-- Leaflet Map (free, no API key) -->
+        <div class="map-board" id="mapBoard">
+          <div id="leafletMap" class="leaflet-map"></div>
+        </div>
+
+        <!-- Route legend under map -->
+        <div class="map-route-summary">
+          <div class="route-summary-card route-summary-a" id="routeSumA">
+            <span class="rs-dot rs-dot-a"></span>
+            <div class="rs-content">
+              <strong id="routeSumNameA">Route A</strong>
+              <span id="routeSumDetailA">Waiting for data…</span>
+            </div>
+          </div>
+          <div class="route-summary-card route-summary-b" id="routeSumB">
+            <span class="rs-dot rs-dot-b"></span>
+            <div class="rs-content">
+              <strong id="routeSumNameB">Route B</strong>
+              <span id="routeSumDetailB">Waiting for data…</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="system-grid">
+          <article class="system-card">
+            <span class="system-label">Map</span>
+            <strong>OpenStreetMap</strong>
+          </article>
+          <article class="system-card">
+            <span class="system-label">Routing</span>
+            <strong id="systemDirectionsMode">OSRM</strong>
+          </article>
+          <article class="system-card">
+            <span class="system-label">Status</span>
+            <strong id="mapStatusText">Ready</strong>
+          </article>
+        </div>
+      </section>
+    </header>
+
+    <main class="workspace">
+      <section class="panel form-panel">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Journey Setup</p>
+            <h2>Input Control</h2>
+          </div>
+        </div>
+
+        <form id="routeForm" class="route-form" novalidate>
+          <div class="field-group">
+            <label for="startLocation">Start Location</label>
+            <div class="autocomplete-wrapper">
+              <input id="startLocation" type="text" value="MG Road, Bengaluru" required autocomplete="off">
+              <div class="autocomplete-menu" id="startLocationMenu"></div>
+            </div>
+          </div>
+          <div class="field-group">
+            <label for="endLocation">Destination</label>
+            <div class="autocomplete-wrapper">
+              <input id="endLocation" type="text" value="Koramangala, Bengaluru" required autocomplete="off">
+              <div class="autocomplete-menu" id="endLocationMenu"></div>
+            </div>
+          </div>
+          <div class="two-col">
+            <div class="field-group">
+              <label for="travelTime" style="display: flex; align-items: center; height: 18px;">
+                <select id="timeType" style="background:transparent; border:none; padding:0; color:var(--text-1); font-size:inherit; font-weight:inherit; text-transform:uppercase; letter-spacing:inherit; cursor:pointer; min-width: 100px; outline:none;">
+                  <option value="depart">Depart At</option>
+                  <option value="arrive">Arrive By</option>
+                </select>
+              </label>
+              <input id="travelTime" type="time" value="21:15" required>
+            </div>
+            <div class="field-group">
+              <label for="travelMode" style="display: flex; align-items: center; height: 18px;">Safety Profile</label>
+              <select id="travelMode" required>
+                <option value="Normal">Normal</option>
+                <option value="Women Safety Mode" selected>Women Safety Mode</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="three-col">
+            <div class="field-group">
+              <label for="transportMode">Transport</label>
+              <select id="transportMode" required>
+                <option value="driving" selected>Driving</option>
+                <option value="transit">Public Transit</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="trafficLevel">Traffic Level</label>
+              <select id="trafficLevel" required>
+                <option value="Low">Low</option>
+                <option value="Moderate">Moderate</option>
+                <option value="High" selected>High</option>
+                <option value="Severe">Severe</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="weather">Weather</label>
+              <select id="weather" required>
+                <option value="Clear">Clear</option>
+                <option value="Sunny">Sunny</option>
+                <option value="Cloudy">Cloudy</option>
+                <option value="Rain" selected>Rain</option>
+                <option value="Heavy Rain">Heavy Rain</option>
+                <option value="Fog">Fog</option>
+                <option value="Snow">Snow</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-group" style="margin-bottom: -10px;">
+            <label for="riskScore">Contextual Default Risk Score <span id="riskValue">6</span>/10</label>
+            <input id="riskScore" type="range" min="1" max="10" step="1" value="6">
+          </div>
+
+          <div class="route-input-grid">
+            <article class="route-input-card route-input-a">
+              <div class="route-card-heading">
+                <span class="route-chip">Route A</span>
+                <span class="route-badge">Primary</span>
+              </div>
+              <div class="route-stats-row">
+                <div class="route-stat">
+                  <span class="route-stat-label">Distance</span>
+                  <strong class="route-stat-value" id="routeDistA">—</strong>
+                </div>
+                <div class="route-stat">
+                  <span class="route-stat-label">ETA</span>
+                  <strong class="route-stat-value" id="routeEtaA">—</strong>
+                </div>
+              </div>
+              <div class="eta-status" id="etaStatusA">
+                <span class="dot-pulse"><span></span><span></span><span></span></span>
+                <span id="etaMsgA">Click Analyze to fetch</span>
+              </div>
+              <input type="hidden" id="distA" value="">
+              <input type="hidden" id="etaA" value="">
+            </article>
+
+            <article class="route-input-card route-input-b">
+              <div class="route-card-heading">
+                <span class="route-chip">Route B</span>
+                <span class="route-badge">Alternate</span>
+              </div>
+              <div class="route-stats-row">
+                <div class="route-stat">
+                  <span class="route-stat-label">Distance</span>
+                  <strong class="route-stat-value" id="routeDistB">—</strong>
+                </div>
+                <div class="route-stat">
+                  <span class="route-stat-label">ETA</span>
+                  <strong class="route-stat-value" id="routeEtaB">—</strong>
+                </div>
+              </div>
+              <div class="eta-status" id="etaStatusB">
+                <span class="dot-pulse"><span></span><span></span><span></span></span>
+                <span id="etaMsgB">Click Analyze to fetch</span>
+              </div>
+              <input type="hidden" id="distB" value="">
+              <input type="hidden" id="etaB" value="">
+            </article>
+          </div>
+
+
+
+          <div class="action-row">
+            <button type="button" class="secondary-btn" id="sampleBtn">Load sample trip</button>
+            <button type="submit" class="primary-btn" id="analyzeBtn">
+              <span id="btnText">Fetch routes &amp; analyze</span>
+              <span class="btn-spinner hidden" id="btnSpinner"><span></span><span></span><span></span></span>
+            </button>
+          </div>
+
+          <p class="form-footnote">
+            Distance and ETA are fetched from OSRM (real road data). Routes are drawn on the interactive map.
+          </p>
+        </form>
+      </section>
+
+      <section class="panel intelligence-panel">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Live Comparison</p>
+            <h2>Route Intelligence</h2>
+          </div>
+        </div>
+
+        <div class="comparison-grid">
+          <article class="comparison-card comparison-card-a" id="routeACard">
+            <div class="comparison-header">
+              <h3>Route A</h3>
+              <span class="mini-pill">Primary</span>
+            </div>
+            <div class="metric-grid">
+              <div><span class="metric-label">Distance</span><strong id="cardDistA">--</strong></div>
+              <div><span class="metric-label">ETA</span><strong id="cardEtaA">--</strong></div>
+              <div><span class="metric-label">Derived Risk</span><strong id="cardRiskA">--</strong></div>
+              <div><span class="metric-label">Safety</span><strong id="cardSafetyA">--</strong></div>
+            </div>
+          </article>
+          <article class="comparison-card comparison-card-b" id="routeBCard">
+            <div class="comparison-header">
+              <h3>Route B</h3>
+              <span class="mini-pill alt">Alternate</span>
+            </div>
+            <div class="metric-grid">
+              <div><span class="metric-label">Distance</span><strong id="cardDistB">--</strong></div>
+              <div><span class="metric-label">ETA</span><strong id="cardEtaB">--</strong></div>
+              <div><span class="metric-label">Derived Risk</span><strong id="cardRiskB">--</strong></div>
+              <div><span class="metric-label">Safety</span><strong id="cardSafetyB">--</strong></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="signal-row">
+          <article class="signal-card">
+            <span class="signal-label">Travel Context</span>
+            <strong id="contextSummary">--</strong>
+          </article>
+          <article class="signal-card">
+            <span class="signal-label">Decision Bias</span>
+            <strong id="biasSummary">--</strong>
+          </article>
+          <article class="signal-card">
+            <span class="signal-label">Winning Margin</span>
+            <strong id="marginSummary">--</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel decision-panel">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Operator Output</p>
+            <h2>Strict Recommendation</h2>
+          </div>
+        </div>
+
+        <pre class="strict-output" id="strictOutput" aria-live="polite">Click "Fetch routes & analyze" to get route data and generate a safety recommendation.</pre>
+
+        <div class="trip-notification-box hidden" id="tripNotificationBox">
+          <div class="trip-notification-title">Trip Plan Overview</div>
+          <div class="trip-notification-row">
+            <span class="emoji">🚕</span>
+            <span>Leave At: <strong id="notifyLeaveTime">--</strong></span>
+          </div>
+          <div class="trip-notification-row">
+            <span class="emoji">🏁</span>
+            <span>Approx Arrival: <strong id="notifyArrivalTime">--</strong></span>
+          </div>
+          <div class="trip-notification-row warning" id="notifyHurdlesRow">
+            <span class="emoji">⚠️</span>
+            <span>Hurdles: <strong id="notifyHurdles">None</strong></span>
+          </div>
+          <div class="calendar-btn-container" style="display: flex; gap: 10px;">
+            <button type="button" class="calendar-btn" id="addToCalBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              Add to Reminders (-5m)
+            </button>
+            <button type="button" class="sos-btn hidden" id="sosBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              Share Live Location (SOS)
+            </button>
+          </div>
+        </div>
+        <div class="decision-grid">
+          <article class="decision-card">
+            <span class="decision-label">Best Route</span>
+            <strong id="decisionRoute">--</strong>
+          </article>
+          <article class="decision-card">
+            <span class="decision-label">Final ETA</span>
+            <strong id="decisionEta">--</strong>
+          </article>
+          <article class="decision-card">
+            <span class="decision-label">Safety Score</span>
+            <strong id="decisionSafety">--</strong>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Leaflet JS (free, no API key) -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js?v=3"></script>
+</body>
+</html>
