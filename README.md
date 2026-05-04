@@ -156,9 +156,9 @@ The decision engine scores each route out of **10** and applies the following we
 | Base contextual risk (slider) | 1 – 10 |
 | Weather (Clear → Heavy Rain) | 0 – 1.5 |
 | Traffic (Low → Severe) | 0.1 – 0.9 |
-| Women Safety Mode multiplier | ×1.25 on the heavier-risk route |
+| Women Safety Mode multiplier | ×1.25 applied to the higher-risk route's final score, making it less likely to be recommended |
 
-The route with the **lower derived risk score** is recommended. In Women Safety Mode the recommendation always breaks ties in favour of the safer path.
+The route with the **lower derived risk score** is recommended. In Women Safety Mode the final score of whichever route has the higher risk is multiplied by 1.25, increasing the gap so the safer route wins more decisively.
 
 ---
 
