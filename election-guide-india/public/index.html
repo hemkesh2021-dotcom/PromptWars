@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Election Guide India — Your AI-Powered Election Assistant</title>
+    <meta name="description" content="An interactive AI assistant that helps Indian citizens understand the election process, voter registration, timelines, and steps in a clear, neutral, and easy-to-follow way.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com;">
+    
+    <!-- Google tag (gtag.js) for Analytics Integration -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ELECTIONGUIDE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ELECTIONGUIDE');
+    </script>
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Skip Navigation -->
+    <a href="#messageInput" class="skip-link">Skip to chat input</a>
+
+    <!-- Animated Background -->
+    <div class="bg-mesh" id="bgMesh"></div>
+    <div class="bg-particles" id="particles" aria-hidden="true"></div>
+
+    <!-- App Container -->
+    <div class="app-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 40 40" fill="none">
+                            <circle cx="20" cy="20" r="18" stroke="url(#logoGrad)" stroke-width="2.5"/>
+                            <path d="M20 8 L20 32" stroke="url(#logoGrad)" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="20" cy="12" r="3" fill="#FF9933"/>
+                            <circle cx="20" cy="20" r="3" fill="#138808"/>
+                            <circle cx="20" cy="28" r="3" fill="#000080"/>
+                            <defs>
+                                <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+                                    <stop offset="0%" stop-color="#FF9933"/>
+                                    <stop offset="50%" stop-color="#FFFFFF"/>
+                                    <stop offset="100%" stop-color="#138808"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Election Guide</h1>
+                        <span class="logo-subtitle">भारत निर्वाचन सहायक</span>
+                    </div>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="sidebar-content">
+                <!-- Quick Topics -->
+                <div class="sidebar-section">
+                    <h3 class="section-title">Quick Topics</h3>
+                    <div class="quick-topics" id="quickTopics">
+                        <button class="topic-btn" data-query="How do I register to vote?">
+                            <span class="topic-icon">📝</span>
+                            <span class="topic-label">Voter Registration</span>
+                        </button>
+                        <button class="topic-btn" data-query="What documents do I need to vote?">
+                            <span class="topic-icon">📄</span>
+                            <span class="topic-label">Required Documents</span>
+                        </button>
+                        <button class="topic-btn" data-query="Explain the election timeline">
+                            <span class="topic-icon">📅</span>
+                            <span class="topic-label">Election Timeline</span>
+                        </button>
+                        <button class="topic-btn" data-query="How does voting work at the polling booth?">
+                            <span class="topic-icon">🗳️</span>
+                            <span class="topic-label">Voting Process</span>
+                        </button>
+                        <button class="topic-btn" data-query="What is an EVM and VVPAT?">
+                            <span class="topic-icon">🖥️</span>
+                            <span class="topic-label">EVM & VVPAT</span>
+                        </button>
+                        <button class="topic-btn" data-query="I just turned 18, what should I do?">
+                            <span class="topic-icon">🎂</span>
+                            <span class="topic-label">First-Time Voter</span>
+                        </button>
+                        <button class="topic-btn" data-query="What is the role of the Election Commission?">
+                            <span class="topic-icon">🏛️</span>
+                            <span class="topic-label">Election Commission</span>
+                        </button>
+                        <button class="topic-btn" data-query="How are election results counted?">
+                            <span class="topic-icon">📊</span>
+                            <span class="topic-label">Vote Counting</span>
+                        </button>
+                        <button class="topic-btn" data-query="What is NOTA?">
+                            <span class="topic-icon">🚫</span>
+                            <span class="topic-label">NOTA Option</span>
+                        </button>
+                        <button class="topic-btn" data-query="Can NRIs vote in Indian elections?">
+                            <span class="topic-icon">✈️</span>
+                            <span class="topic-label">NRI Voting</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Election Timeline Visual -->
+                <div class="sidebar-section">
+                    <h3 class="section-title">Election Phases</h3>
+                    <div class="timeline-mini">
+                        <div class="timeline-step" data-phase="1">
+                            <div class="step-dot"></div>
+                            <div class="step-info">
+                                <span class="step-name">Announcement</span>
+                                <span class="step-desc">Model Code begins</span>
+                            </div>
+                        </div>
+                        <div class="timeline-step" data-phase="2">
+                            <div class="step-dot"></div>
+                            <div class="step-info">
+                                <span class="step-name">Nominations</span>
+                                <span class="step-desc">Candidates file papers</span>
+                            </div>
+                        </div>
+                        <div class="timeline-step" data-phase="3">
+                            <div class="step-dot"></div>
+                            <div class="step-info">
+                                <span class="step-name">Campaigning</span>
+                                <span class="step-desc">Parties seek votes</span>
+                            </div>
+                        </div>
+                        <div class="timeline-step" data-phase="4">
+                            <div class="step-dot"></div>
+                            <div class="step-info">
+                                <span class="step-name">Polling Day</span>
+                                <span class="step-desc">Citizens cast votes</span>
+                            </div>
+                        </div>
+                        <div class="timeline-step" data-phase="5">
+                            <div class="step-dot"></div>
+                            <div class="step-info">
+                                <span class="step-name">Counting</span>
+                                <span class="step-desc">Results declared</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="disclaimer">
+                    <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
+                        <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 10.5a.75.75 0 110-1.5.75.75 0 010 1.5zM8.75 8a.75.75 0 01-1.5 0V5a.75.75 0 011.5 0v3z"/>
+                    </svg>
+                    <span>Neutral & Non-partisan</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="main-area">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12h18M3 6h18M3 18h18"/>
+                    </svg>
+                </button>
+                <div class="topbar-center">
+                    <div class="status-badge">
+                        <span class="status-dot"></span>
+                        <span>AI Election Assistant</span>
+                    </div>
+                </div>
+                <div class="topbar-actions">
+                    <select class="lang-select" id="langSelect" aria-label="Select language">
+                        <option value="en">🌐 English</option>
+                        <option value="hi">हिन्दी</option>
+                        <option value="ta">தமிழ்</option>
+                        <option value="te">తెలుగు</option>
+                        <option value="bn">বাংলা</option>
+                        <option value="mr">मराठी</option>
+                        <option value="gu">ગુજરાતી</option>
+                        <option value="kn">ಕನ್ನಡ</option>
+                        <option value="ml">മലയാളം</option>
+                        <option value="pa">ਪੰਜਾਬੀ</option>
+                        <option value="ur">اردو</option>
+                    </select>
+                    <button class="clear-btn" id="clearBtn" aria-label="Clear conversation">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                        </svg>
+                        <span>Clear</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Messages Container -->
+            <div class="messages-container" id="messagesContainer">
+                <div class="messages-scroll" id="messagesScroll" role="log" aria-live="polite" aria-label="Conversation history">
+                    <!-- Welcome Card -->
+                    <div class="welcome-card" id="welcomeCard">
+                        <div class="welcome-emblem">
+                            <div class="emblem-ring ring-1"></div>
+                            <div class="emblem-ring ring-2"></div>
+                            <div class="emblem-ring ring-3"></div>
+                            <div class="emblem-core">
+                                <svg viewBox="0 0 48 48" fill="none" width="48" height="48">
+                                    <path d="M24 4L28 16H40L30 24L34 36L24 28L14 36L18 24L8 16H20L24 4Z" fill="url(#starGrad)" opacity="0.9"/>
+                                    <defs>
+                                        <linearGradient id="starGrad" x1="8" y1="4" x2="40" y2="36">
+                                            <stop offset="0%" stop-color="#FF9933"/>
+                                            <stop offset="100%" stop-color="#138808"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                        </div>
+                        <h2 class="welcome-title">Welcome to Election Guide India</h2>
+                        <p class="welcome-subtitle">Your AI-powered assistant for understanding the Indian election process. Ask me anything about voter registration, election timelines, voting procedures, and more.</p>
+                        
+                        <div class="welcome-features">
+                            <div class="feature-card">
+                                <div class="feature-icon">🗳️</div>
+                                <h4>Voting Process</h4>
+                                <p>Step-by-step guidance</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">📋</div>
+                                <h4>Registration</h4>
+                                <p>Easy enrollment help</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">📅</div>
+                                <h4>Timelines</h4>
+                                <p>Key dates & phases</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">🔍</div>
+                                <h4>Fact Check</h4>
+                                <p>Verified information</p>
+                            </div>
+                        </div>
+
+                        <div class="welcome-suggestions">
+                            <p class="suggestions-label">Try asking:</p>
+                            <div class="suggestion-chips">
+                                <button class="suggestion-chip" data-query="How do I register as a voter?">How do I register as a voter?</button>
+                                <button class="suggestion-chip" data-query="I just turned 18, what should I do?">I just turned 18</button>
+                                <button class="suggestion-chip" data-query="What happens on polling day?">What happens on polling day?</button>
+                                <button class="suggestion-chip" data-query="Explain the entire election process">Explain the election process</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <div class="input-container" id="inputContainer">
+                        <textarea 
+                            id="messageInput" 
+                            placeholder="Ask about elections, voting, registration..." 
+                            rows="1"
+                            aria-label="Type your question"
+                        ></textarea>
+                        <button class="send-btn" id="sendBtn" aria-label="Send message" disabled>
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="input-disclaimer">This assistant provides educational information only. Always verify with the <a href="https://eci.gov.in" target="_blank" rel="noopener noreferrer">official Election Commission of India website</a>.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script src="knowledge.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

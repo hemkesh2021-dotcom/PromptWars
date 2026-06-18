@@ -1,0 +1,47 @@
+# ============================================
+# Election Guide India — .dockerignore
+# Keep the Docker image lean
+# ============================================
+
+# Version control
+.git
+.gitignore
+
+# Environment files (secrets injected at runtime)
+.env
+.env.*
+!.env.example
+
+# Dependencies (installed in Docker build)
+node_modules
+
+# Documentation
+README.md
+*.md
+LICENSE
+
+# IDE
+.vscode
+.idea
+*.code-workspace
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Testing
+coverage
+.nyc_output
+tests
+
+# Artifacts & misc
+.gemini
+tmp
+temp
+logs
+*.log
